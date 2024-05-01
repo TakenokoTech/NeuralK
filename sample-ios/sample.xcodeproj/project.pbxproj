@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,6 +11,8 @@
 		0772EEC52BE227A700AA1178 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0772EEC42BE227A700AA1178 /* ContentView.swift */; };
 		0772EEC72BE227A800AA1178 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0772EEC62BE227A800AA1178 /* Assets.xcassets */; };
 		0772EECA2BE227A800AA1178 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0772EEC92BE227A800AA1178 /* Preview Assets.xcassets */; };
+		0793B5342BE22C15009DD21D /* NeuralK-debug in Frameworks */ = {isa = PBXBuildFile; productRef = 0793B5332BE22C15009DD21D /* NeuralK-debug */; };
+		0793B5362BE231FA009DD21D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0793B5352BE231FA009DD21D /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +21,7 @@
 		0772EEC42BE227A700AA1178 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0772EEC62BE227A800AA1178 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0772EEC92BE227A800AA1178 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		0793B5352BE231FA009DD21D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0793B5342BE22C15009DD21D /* NeuralK-debug in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,8 +55,9 @@
 		0772EEC12BE227A700AA1178 /* sample */ = {
 			isa = PBXGroup;
 			children = (
-				0772EEC22BE227A700AA1178 /* sampleApp.swift */,
+				0793B5352BE231FA009DD21D /* AppDelegate.swift */,
 				0772EEC42BE227A700AA1178 /* ContentView.swift */,
+				0772EEC22BE227A700AA1178 /* sampleApp.swift */,
 				0772EEC62BE227A800AA1178 /* Assets.xcassets */,
 				0772EEC82BE227A800AA1178 /* Preview Content */,
 			);
@@ -83,6 +88,9 @@
 			dependencies = (
 			);
 			name = sample;
+			packageProductDependencies = (
+				0793B5332BE22C15009DD21D /* NeuralK-debug */,
+			);
 			productName = sample;
 			productReference = 0772EEBF2BE227A700AA1178 /* sample.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +119,9 @@
 				Base,
 			);
 			mainGroup = 0772EEB62BE227A700AA1178;
+			packageReferences = (
+				0793B5322BE22C15009DD21D /* XCLocalSwiftPackageReference ".." */,
+			);
 			productRefGroup = 0772EEC02BE227A700AA1178 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -137,6 +148,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0793B5362BE231FA009DD21D /* AppDelegate.swift in Sources */,
 				0772EEC52BE227A700AA1178 /* ContentView.swift in Sources */,
 				0772EEC32BE227A700AA1178 /* sampleApp.swift in Sources */,
 			);
@@ -339,6 +351,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		0793B5322BE22C15009DD21D /* XCLocalSwiftPackageReference ".." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ..;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0793B5332BE22C15009DD21D /* NeuralK-debug */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "NeuralK-debug";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0772EEB72BE227A700AA1178 /* Project object */;
 }
