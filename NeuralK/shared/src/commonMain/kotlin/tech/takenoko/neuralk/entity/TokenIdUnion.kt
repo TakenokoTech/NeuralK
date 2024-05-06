@@ -6,4 +6,10 @@ sealed class TokenIdUnion {
     data class TensorType(val value: Tensor) : TokenIdUnion() {
         class Tensor
     }
+
+    fun concatTokenIds() = when (this) {
+        is IntListType -> value
+        is IntType -> listOf(value)
+        is TensorType -> TODO()
+    }
 }

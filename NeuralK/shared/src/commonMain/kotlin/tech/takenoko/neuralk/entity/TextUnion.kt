@@ -5,7 +5,7 @@ sealed class TextUnion {
     data class StringListType(val value: List<String>) : TextUnion()
 
     fun concatText() = when (this) {
-        is TextUnion.StringListType -> value
-        is TextUnion.StringType -> listOf(value)
+        is StringListType -> value
+        is StringType -> listOf(value)
     }.joinToString(" ") { it }
 }

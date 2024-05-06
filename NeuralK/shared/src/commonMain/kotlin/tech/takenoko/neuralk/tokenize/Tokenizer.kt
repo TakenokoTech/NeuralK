@@ -17,9 +17,9 @@ class Tokenizer(
         maxLength: Int? = null,
     ): TokenIdUnion.IntListType {
         val vocab1 = json.addedTokens.associate { it.content to it.id }
-        val vocab2 = json.model.vocab
+        val vocab2 = json.model.vocab.toList().associate { it.first to it.second }
         val (ans, tmp) = mutableListOf<Int>() to mutableListOf<String>()
-        tokenizeBySubWords(text.concatText(), vocab1.keys).forEach { word ->
+        tokenizeBySubWords(text.concatText(), vocab1.keys.toSet()).forEach { word ->
             val id = vocab1[word]
             if (id != null) {
                 val tokenIds = tokenizeBySubWords(tmp.joinToString(""), vocab2)
@@ -37,8 +37,13 @@ class Tokenizer(
         skipSpecialTokens: Boolean = false,
         cleanUpTokenizationSpaces: Boolean = false,
     ): TextUnion.StringType {
-        println(json.model.vocab)
-        return TextUnion.StringType("")
+        val vocab1 = json.addedTokens.associate { it.id to it.content }
+        val vocab2 = json.model.vocab.toList().associate { it.second to it.first }
+        val text = tokenIds.concatTokenIds()
+            .map((vocab1 + vocab2)::get)
+            .joinToString("")
+            .replace("▁", " ")
+        return TextUnion.StringType(text)
     }
 
     fun tokenizeBySubWords(text: String, vocabs: Map<String, Int>): List<Int> {

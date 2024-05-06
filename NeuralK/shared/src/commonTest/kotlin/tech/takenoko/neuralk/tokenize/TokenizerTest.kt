@@ -21,8 +21,17 @@ class TokenizerTest {
 
     @Test
     fun decode() {
-        val actual = Tokenizer(sampleJson).decode(TokenIdUnion.IntType(1))
-        assertEquals(TextUnion.StringType(""), actual)
+        val tokenIds = TokenIdUnion.IntListType(
+            listOf(
+                1, 32006, 306, 626, 385,
+                15129, 20255, 319, 29902, 29889, 32007
+            )
+        )
+        val actual = Tokenizer(sampleJson).decode(tokenIds)
+        val expected = """
+        <s><|system|> I am an excellent assistant AI.<|end|>
+        """.trimIndent()
+        assertEquals(TextUnion.StringType(expected), actual)
     }
 
     @Test
