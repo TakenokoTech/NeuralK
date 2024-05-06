@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.androidLibrary)
 }
 
@@ -14,14 +15,14 @@ kotlin {
         }
     }
     
-    val xcf = XCFramework()
+    val xcf = XCFramework("NeuralK")
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "shared"
+            baseName = "NeuralK"
             xcf.add(this)
             isStatic = true
         }
@@ -30,6 +31,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             //put your multiplatform dependencies here
+            implementation(libs.kotlin.serialization)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
