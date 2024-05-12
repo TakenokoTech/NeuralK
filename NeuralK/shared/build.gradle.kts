@@ -31,7 +31,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             //put your multiplatform dependencies here
-            implementation(libs.kotlin.serialization)
+            implementation(libs.kotlin.serialization.json)
+            implementation(libs.kotlin.serialization.protobuf)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

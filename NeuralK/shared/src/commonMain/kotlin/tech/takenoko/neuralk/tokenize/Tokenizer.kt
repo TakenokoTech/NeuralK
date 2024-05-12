@@ -1,9 +1,9 @@
 package tech.takenoko.neuralk.tokenize
 
 import kotlinx.serialization.json.Json
-import tech.takenoko.neuralk.entity.TextUnion
-import tech.takenoko.neuralk.entity.TokenIdUnion
 import tech.takenoko.neuralk.entity.TokenizerJson
+import tech.takenoko.neuralk.entity.TokenizerText
+import tech.takenoko.neuralk.entity.TokenizerTokenId
 
 class Tokenizer(
     private val json: TokenizerJson
@@ -13,9 +13,9 @@ class Tokenizer(
     ) : this(Json.decodeFromString<TokenizerJson>(json))
 
     fun encode(
-        text: TextUnion,
+        text: TokenizerText,
         maxLength: Int? = null,
-    ): TokenIdUnion.IntListType {
+    ): TokenizerTokenId.IntListType {
         val vocab1 = json.addedTokens.associate { it.content to it.id }
         val vocab2 = json.model.vocab.toList().associate { it.first to it.second }
         val (ans, tmp) = mutableListOf<Int>() to mutableListOf<String>()
@@ -29,21 +29,21 @@ class Tokenizer(
                 tmp.add(word)
             }
         }
-        return TokenIdUnion.IntListType(ans)
+        return TokenizerTokenId.IntListType(ans)
     }
 
     fun decode(
-        tokenIds: TokenIdUnion,
+        tokenIds: TokenizerTokenId,
         skipSpecialTokens: Boolean = false,
         cleanUpTokenizationSpaces: Boolean = false,
-    ): TextUnion.StringType {
+    ): TokenizerText.StringType {
         val vocab1 = json.addedTokens.associate { it.id to it.content }
         val vocab2 = json.model.vocab.toList().associate { it.second to it.first }
         val text = tokenIds.concatTokenIds()
             .map((vocab1 + vocab2)::get)
             .joinToString("")
             .replace("▁", " ")
-        return TextUnion.StringType(text)
+        return TokenizerText.StringType(text)
     }
 
     fun tokenizeBySubWords(text: String, vocabs: Map<String, Int>): List<Int> {

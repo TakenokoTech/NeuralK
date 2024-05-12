@@ -1,7 +1,7 @@
 package tech.takenoko.neuralk.tokenize
 
-import tech.takenoko.neuralk.entity.TextUnion
-import tech.takenoko.neuralk.entity.TokenIdUnion
+import tech.takenoko.neuralk.entity.TokenizerText
+import tech.takenoko.neuralk.entity.TokenizerTokenId
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -11,17 +11,17 @@ class TokenizerTest {
         val text = """
         <s><|system|> I am an excellent assistant AI.<|end|>
         """.trimIndent()
-        val actual = Tokenizer(sampleJson).encode(TextUnion.StringType(text))
+        val actual = Tokenizer(sampleJson).encode(TokenizerText.StringType(text))
         val expected = listOf(
             1, 32006, 306, 626, 385,
             15129, 20255, 319, 29902, 29889, 32007
         )
-        assertEquals(TokenIdUnion.IntListType(expected), actual)
+        assertEquals(TokenizerTokenId.IntListType(expected), actual)
     }
 
     @Test
     fun decode() {
-        val tokenIds = TokenIdUnion.IntListType(
+        val tokenIds = TokenizerTokenId.IntListType(
             listOf(
                 1, 32006, 306, 626, 385,
                 15129, 20255, 319, 29902, 29889, 32007
@@ -31,7 +31,7 @@ class TokenizerTest {
         val expected = """
         <s><|system|> I am an excellent assistant AI.<|end|>
         """.trimIndent()
-        assertEquals(TextUnion.StringType(expected), actual)
+        assertEquals(TokenizerText.StringType(expected), actual)
     }
 
     @Test
