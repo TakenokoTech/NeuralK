@@ -10,5 +10,6 @@ class LoaderTest {
     @Test
     fun load() {
         Loader().load(Base64.decode(tfmodel.encodeToByteArray()))
+        Loader().load(Base64.decode(ckpt.encodeToByteArray()))
     }
 }
