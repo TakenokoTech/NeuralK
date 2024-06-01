@@ -14,7 +14,7 @@ kotlin {
             }
         }
     }
-    
+
     val xcf = XCFramework("NeuralK")
     listOf(
         iosX64(),
@@ -33,6 +33,7 @@ kotlin {
             //put your multiplatform dependencies here
             implementation(libs.kotlin.serialization.json)
             implementation(libs.kotlin.serialization.protobuf)
+            implementation(libs.kotlin.coroutines.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
