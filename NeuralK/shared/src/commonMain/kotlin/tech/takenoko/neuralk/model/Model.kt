@@ -38,6 +38,7 @@ class Model(private val layers: List<Layer>, private val optimizer: SGD) {
         for (layer in layers.reversed()) currentGrad = layer.backward(currentGrad)
     }
 
+    // TODO: Lossクラスを作る
     private fun mseLoss(predictions: Tensor, labels: Tensor): Float {
         val diff = (predictions - labels) as Tensor2D
         val sum = diff.data.sumOf { row -> row.sumOf { it.toDouble() * it } }.toFloat()

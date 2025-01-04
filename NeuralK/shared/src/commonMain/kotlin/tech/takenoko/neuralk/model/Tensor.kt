@@ -82,11 +82,16 @@ class Tensor0D(val data: Float) : Tensor() {
 class Tensor1D(val data: Array<Float>) : Tensor() {
     override val rows: Int get() = data.size
     override val cols: Int get() = 1
+
+    constructor(size: Int, data: Double) : this(Array(size) { data.toFloat() })
 }
 
 class Tensor2D(val data: Array<Array<Float>>) : Tensor() {
     override val rows = data.size
     override val cols = if (data.isNotEmpty()) data[0].size else 0
+
+    constructor(rows: Int, cols: Int, data: Double) :
+        this(Array(rows) { Array(cols) { data.toFloat() } })
 
     fun sum() = data.sumOf { it.sum().toDouble() }
     fun transpose() = Tensor2D(Array(cols) { i -> Array(rows) { j -> data[j][i] } })

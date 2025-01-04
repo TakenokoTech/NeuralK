@@ -1,7 +1,5 @@
 package tech.takenoko.neuralk.model
 
-import kotlin.random.Random
-
 sealed class Layer {
     abstract fun initialize(input: Tensor)
     abstract fun forward(input: Tensor): Tensor
@@ -21,8 +19,12 @@ class DenseLayer(
 
     override fun initialize(input: Tensor) {
         inputSize = input.rows
-        weights = initWeights ?: Matrix(Array(units) { Array(inputSize) { Random.nextFloat() } })
-        bias = initBias ?: Vector(Array(units) { Random.nextFloat() })
+        if (!::weights.isInitialized) {
+            weights = initWeights ?: Matrix(rows = units, cols = inputSize, data = 0.5)
+        }
+        if (!::bias.isInitialized) {
+            bias = initBias ?: Vector(size = units, data = 0.5)
+        }
     }
 
     override fun forward(input: Tensor): Tensor {

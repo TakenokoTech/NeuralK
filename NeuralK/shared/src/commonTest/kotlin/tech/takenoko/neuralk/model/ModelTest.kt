@@ -9,39 +9,22 @@ class ModelTest {
     fun test() {
         // データ準備（簡易例）
         fun rand() = Random.nextFloat() * 0.01F
-        val inputs = listOf(
-            Tensor2D(Array(1) { Array(3) { (it + rand()) * 1 } }),
-            Tensor2D(Array(1) { Array(3) { (it + rand()) * 1 } }),
-            Tensor2D(Array(1) { Array(3) { (it + rand()) * 1 } }),
-            Tensor2D(Array(1) { Array(3) { (it + rand()) * 2 } }),
-            Tensor2D(Array(1) { Array(3) { (it + rand()) * 2 } }),
-            Tensor2D(Array(1) { Array(3) { (it + rand()) * 2 } }),
-            Tensor2D(Array(1) { Array(3) { (it + rand()) * 3 } }),
-            Tensor2D(Array(1) { Array(3) { (it + rand()) * 3 } }),
-            Tensor2D(Array(1) { Array(3) { (it + rand()) * 3 } })
-        )
-        val labels = listOf(
-            Tensor2D(Array(1) { Array(1) { 1f } }),
-            Tensor2D(Array(1) { Array(1) { 1f } }),
-            Tensor2D(Array(1) { Array(1) { 1f } }),
-            Tensor2D(Array(1) { Array(1) { 2f } }),
-            Tensor2D(Array(1) { Array(1) { 2f } }),
-            Tensor2D(Array(1) { Array(1) { 2f } }),
-            Tensor2D(Array(1) { Array(1) { 3f } }),
-            Tensor2D(Array(1) { Array(1) { 3f } }),
-            Tensor2D(Array(1) { Array(1) { 3f } })
-        )
+        fun input(index: Int) = Tensor2D(Array(1) { Array(3) { (it.plus(1) + rand()) * index } })
+        fun label(index: Int) = Tensor2D(Array(1) { Array(1) { index.toFloat() } })
+        val inputs = (0..100).flatMap { listOf(input(1), input(2), input(3)) }
+        val labels = (0..100).flatMap { listOf(label(1), label(2), label(3)) }
 
         // モデルの構築
         val layers = listOf(
-            DenseLayer(10)
+            DenseLayer(5),
+            DenseLayer(3)
         )
         val optimizer = SGD(learningRate = 0.01f)
         val model = Model(layers, optimizer)
 
         // 学習
         println("=== Training ===")
-        model.fit(inputs, labels, epochs = 100)
+        model.fit(inputs, labels, epochs = 50)
 
         // 評価
         println("=== Evaluation ===")
@@ -51,13 +34,13 @@ class ModelTest {
         // 推論
         println("=== Prediction ===")
         listOf(
-            Tensor2D(Array(1) { Array(3) { (it + 1).toFloat() * 1 } }),
-            Tensor2D(Array(1) { Array(3) { (it + 1).toFloat() * 2 } }),
-            Tensor2D(Array(1) { Array(3) { (it + 1).toFloat() * 3 } })
+            Tensor2D(Array(1) { Array(3) { it.plus(1).toFloat() * 0F } }),
+            Tensor2D(Array(1) { Array(3) { it.plus(1).toFloat() * 1F } }),
+            Tensor2D(Array(1) { Array(3) { it.plus(1).toFloat() * 2F } }),
+            Tensor2D(Array(1) { Array(3) { it.plus(1).toFloat() * 3F } })
         ).forEach { testInput ->
-            println("Input: ${testInput.data.map { it.toList() }}")
             val prediction = model.predict(testInput) as Tensor2D
-            println("Prediction: ${prediction.data.map { it.toList() }}")
+            println("Input: ${testInput.toList()}, Prediction: ${prediction.toList()}")
         }
     }
 }
