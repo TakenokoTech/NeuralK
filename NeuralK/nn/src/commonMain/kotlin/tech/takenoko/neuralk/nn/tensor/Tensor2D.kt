@@ -1,9 +1,9 @@
 package tech.takenoko.neuralk.nn.tensor
 
+import tech.takenoko.neuralk.nn.value.Shape
+
 class Tensor2D(val data: Array<Array<Float>>) : Tensor() {
-    override val shape = listOf(data.size, data.first().size)
-    override val rows = shape[0]
-    override val cols = shape[1]
+    override val shape = Shape(data.size, data.first().size)
 
     constructor(rows: Int, cols: Int, data: Double) :
         this(Array(rows) { Array(cols) { data.toFloat() } })

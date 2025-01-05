@@ -7,6 +7,7 @@ import tech.takenoko.neuralk.nn.model.Model
 import tech.takenoko.neuralk.nn.model.Sequential
 import tech.takenoko.neuralk.nn.optimizer.Sgd
 import tech.takenoko.neuralk.nn.tensor.Tensor2D
+import tech.takenoko.neuralk.nn.value.Shape
 
 class ModelTest {
 
@@ -53,6 +54,7 @@ class ModelTest {
     @Test
     fun test2() {
         val model = Sequential {
+            input(shape = Shape(1, 3))
             dense(5)
             dense(3)
         }.compile(Sgd(learningRate = 0.01))

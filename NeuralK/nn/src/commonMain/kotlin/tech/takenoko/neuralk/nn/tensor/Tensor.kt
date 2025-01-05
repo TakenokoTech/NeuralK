@@ -1,9 +1,11 @@
 package tech.takenoko.neuralk.nn.tensor
 
+import tech.takenoko.neuralk.nn.value.Shape
+
 sealed class Tensor {
-    abstract val shape: List<Int>
-    abstract val rows: Int
-    abstract val cols: Int
+    abstract val shape: Shape
+    val rows: Int get() = shape.rows
+    val cols: Int get() = shape.cols
 
     operator fun plus(other: Tensor): Tensor {
         val vector = { a: Float, b: Float -> a + b }

@@ -6,7 +6,7 @@ sealed class Optimizer {
     abstract fun update(parameter: Parameter, gradient: Tensor)
 
     interface Parameter {
-        fun getData(): Tensor
+        fun getValue(): Tensor
         fun update(grad: Tensor, learningRate: Double)
     }
 }

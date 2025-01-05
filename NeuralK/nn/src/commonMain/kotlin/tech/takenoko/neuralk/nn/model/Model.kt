@@ -18,7 +18,8 @@ open class Model(protected var layers: List<Layer>, protected var optimizer: Opt
                 val grad = mseLossGrad(predictions, label)
                 backward(grad)
                 for (layer in layers) {
-                    if (layer.trainable) layer.update(optimizer!!)
+                    if (!layer.trainable) continue
+                    layer.update(optimizer!!)
                 }
             }
             if (epoch % 10 == 0) println("Epoch $epoch: Loss = ${totalLoss / inputs.size}")
