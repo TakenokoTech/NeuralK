@@ -1,0 +1,85 @@
+package tech.takenoko.neuralk.nn
+
+import kotlin.random.Random
+import kotlin.test.Test
+import tech.takenoko.neuralk.nn.layer.Dense
+import tech.takenoko.neuralk.nn.model.Model
+import tech.takenoko.neuralk.nn.model.Sequential
+import tech.takenoko.neuralk.nn.optimizer.Sgd
+import tech.takenoko.neuralk.nn.tensor.Tensor2D
+import tech.takenoko.neuralk.nn.value.Shape
+
+class ModelTest {
+
+    companion object {
+        private val epochs = 20
+        private val shuffle = false
+        private fun rand() = Random.nextFloat() * 0.1F
+        private fun input(i: Int) = Tensor2D(Array(1) { Array(3) { (it.plus(1) + rand()) * i } })
+        private fun label(index: Int) = Tensor2D(Array(1) { Array(1) { index.toFloat() } })
+
+        private val inputs = (0..100).flatMap {
+            listOf(input(1), input(4), input(3), input(2), input(5))
+        }
+        private val labels = (0..100).flatMap {
+            listOf(label(1), label(4), label(3), label(2), label(5))
+        }
+
+        private val testData = listOf(
+            Tensor2D(Array(1) { Array(3) { it.plus(1).toFloat() * 0F } }),
+            Tensor2D(Array(1) { Array(3) { it.plus(1).toFloat() * 1F } }),
+            Tensor2D(Array(1) { Array(3) { it.plus(1).toFloat() * 2F } }),
+            Tensor2D(Array(1) { Array(3) { it.plus(1).toFloat() * 3F } }),
+            Tensor2D(Array(1) { Array(3) { it.plus(1).toFloat() * 4F } }),
+            Tensor2D(Array(1) { Array(3) { it.plus(1).toFloat() * 5F } }),
+            Tensor2D(Array(1) { Array(3) { it.plus(1).toFloat() * 6F } })
+        )
+    }
+
+    @Test
+    fun test1() {
+        // モデルの構築
+        val model = Model(
+            layers = listOf(Dense(5), Dense(3)),
+            optimizer = Sgd(learningRate = 0.01, momentum = 0.0)
+        )
+
+        // 学習
+        println("=== Training ===")
+        model.fit(inputs, labels, epochs, shuffle)
+
+        // 評価
+        println("=== Evaluation ===")
+        val loss = model.evaluate(inputs, labels)
+        println("Loss: $loss")
+
+        // 推論
+        println("=== Prediction ===")
+        testData.forEach { testInput ->
+            val prediction = model.predict(testInput) as Tensor2D
+            println("Input: ${testInput.toList()}, Prediction: ${prediction.toList()}")
+        }
+    }
+
+    @Test
+    fun test2() {
+        val model = Sequential {
+            input(shape = Shape(1, 3))
+            dense(5)
+            dense(3)
+        }.compile(Sgd(learningRate = 0.01, momentum = 0.0))
+
+        println("=== Training ===")
+        model.fit(inputs, labels, epochs, shuffle)
+
+        println("=== Evaluation ===")
+        val loss = model.evaluate(inputs, labels)
+        println("Loss: $loss")
+
+        println("=== Prediction ===")
+        testData.forEach { testInput ->
+            val prediction = model.predict(testInput) as Tensor2D
+            println("Input: ${testInput.toList()}, Prediction: ${prediction.toList()}")
+        }
+    }
+}
