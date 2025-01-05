@@ -1,7 +1,14 @@
-package tech.takenoko.neuralk.nn
+package tech.takenoko.neuralk.nn.model
 
-class Model(private val layers: List<Layer>, private val optimizer: SGD) {
+import tech.takenoko.neuralk.nn.layer.Layer
+import tech.takenoko.neuralk.nn.optimizer.Optimizer
+import tech.takenoko.neuralk.nn.tensor.Tensor
+import tech.takenoko.neuralk.nn.tensor.Tensor0D
+import tech.takenoko.neuralk.nn.tensor.Tensor2D
+
+open class Model(protected var layers: List<Layer>, protected var optimizer: Optimizer? = null) {
     fun fit(inputs: List<Tensor>, labels: List<Tensor>, epochs: Int) {
+        requireNotNull(optimizer) { "Optimizer must be set" }
         require(inputs.size == labels.size) { "Inputs and labels must have the same size" }
         for (epoch in 1..epochs) {
             var totalLoss = 0f
@@ -10,6 +17,9 @@ class Model(private val layers: List<Layer>, private val optimizer: SGD) {
                 totalLoss += mseLoss(predictions, label)
                 val grad = mseLossGrad(predictions, label)
                 backward(grad)
+                for (layer in layers) {
+                    if (layer.trainable) layer.update(optimizer!!)
+                }
             }
             if (epoch % 10 == 0) println("Epoch $epoch: Loss = ${totalLoss / inputs.size}")
         }
@@ -47,6 +57,6 @@ class Model(private val layers: List<Layer>, private val optimizer: SGD) {
 
     private fun mseLossGrad(predictions: Tensor, labels: Tensor): Tensor {
         val diff = (predictions - labels) as Tensor2D
-        return diff * Scalar(2f / (diff.rows * diff.cols))
+        return diff * Tensor0D(2f / (diff.rows * diff.cols))
     }
 }

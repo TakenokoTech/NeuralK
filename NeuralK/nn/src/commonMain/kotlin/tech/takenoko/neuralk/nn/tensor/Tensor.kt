@@ -1,10 +1,7 @@
-package tech.takenoko.neuralk.nn
-
-typealias Scalar = Tensor0D
-typealias Vector = Tensor1D
-typealias Matrix = Tensor2D
+package tech.takenoko.neuralk.nn.tensor
 
 sealed class Tensor {
+    abstract val shape: List<Int>
     abstract val rows: Int
     abstract val cols: Int
 
@@ -37,6 +34,7 @@ sealed class Tensor {
         val matrix = { a: Array<Float>, b: Array<Float> -> a.mapElements(b, vector) }
         return when {
             this is Tensor0D && other is Tensor0D -> Tensor0D(data * other.data)
+            this is Tensor1D && other is Tensor0D -> Tensor1D(data.broadcastMap(other.data, vector))
             this is Tensor1D && other is Tensor1D -> Tensor1D(data.mapElements(other.data, vector))
             this is Tensor2D && other is Tensor0D -> Tensor2D(data.mapScalar(other.data, vector))
             this is Tensor2D && other is Tensor2D -> Tensor2D(data.mapElements(other.data, matrix))
@@ -70,29 +68,4 @@ sealed class Tensor {
         is Tensor1D -> data.toList()
         is Tensor2D -> data.flatMap { it.toList() }.toList()
     }
-}
-
-class Tensor0D(val data: Float) : Tensor() {
-    override val rows = 1
-    override val cols = 1
-
-    constructor(data: Double) : this(data.toFloat())
-}
-
-class Tensor1D(val data: Array<Float>) : Tensor() {
-    override val rows: Int get() = data.size
-    override val cols: Int get() = 1
-
-    constructor(size: Int, data: Double) : this(Array(size) { data.toFloat() })
-}
-
-class Tensor2D(val data: Array<Array<Float>>) : Tensor() {
-    override val rows = data.size
-    override val cols = if (data.isNotEmpty()) data[0].size else 0
-
-    constructor(rows: Int, cols: Int, data: Double) :
-        this(Array(rows) { Array(cols) { data.toFloat() } })
-
-    fun sum() = data.sumOf { it.sum().toDouble() }
-    fun transpose() = Tensor2D(Array(cols) { i -> Array(rows) { j -> data[j][i] } })
 }
