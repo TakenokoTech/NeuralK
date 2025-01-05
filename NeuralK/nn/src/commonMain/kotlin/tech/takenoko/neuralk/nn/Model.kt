@@ -1,4 +1,4 @@
-package tech.takenoko.neuralk.model
+package tech.takenoko.neuralk.nn
 
 class Model(private val layers: List<Layer>, private val optimizer: SGD) {
     fun fit(inputs: List<Tensor>, labels: List<Tensor>, epochs: Int) {

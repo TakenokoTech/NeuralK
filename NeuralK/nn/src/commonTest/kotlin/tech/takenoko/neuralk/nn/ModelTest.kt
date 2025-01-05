@@ -1,4 +1,4 @@
-package tech.takenoko.neuralk.model
+package tech.takenoko.neuralk.nn
 
 import kotlin.random.Random
 import kotlin.test.Test

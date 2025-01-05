@@ -1,4 +1,4 @@
-package tech.takenoko.neuralk.model
+package tech.takenoko.neuralk.nn
 
 typealias Scalar = Tensor0D
 typealias Vector = Tensor1D

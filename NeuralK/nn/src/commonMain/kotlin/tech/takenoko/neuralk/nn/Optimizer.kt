@@ -1,4 +1,4 @@
-package tech.takenoko.neuralk.model
+package tech.takenoko.neuralk.nn
 
 sealed class Optimizer {
     abstract fun update(weights: Tensor, gradients: Tensor): Tensor

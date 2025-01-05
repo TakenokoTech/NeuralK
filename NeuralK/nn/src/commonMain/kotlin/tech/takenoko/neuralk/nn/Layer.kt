@@ -1,4 +1,4 @@
-package tech.takenoko.neuralk.model
+package tech.takenoko.neuralk.nn
 
 sealed class Layer {
     abstract fun initialize(input: Tensor)
