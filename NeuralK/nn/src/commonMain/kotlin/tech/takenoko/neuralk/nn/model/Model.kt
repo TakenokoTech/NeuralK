@@ -7,12 +7,13 @@ import tech.takenoko.neuralk.nn.tensor.Tensor0D
 import tech.takenoko.neuralk.nn.tensor.Tensor2D
 
 open class Model(protected var layers: List<Layer>, protected var optimizer: Optimizer? = null) {
-    fun fit(inputs: List<Tensor>, labels: List<Tensor>, epochs: Int) {
+    fun fit(inputs: List<Tensor>, labels: List<Tensor>, epochs: Int, shuffle: Boolean = true) {
         requireNotNull(optimizer) { "Optimizer must be set" }
         require(inputs.size == labels.size) { "Inputs and labels must have the same size" }
         for (epoch in 1..epochs) {
             var totalLoss = 0f
-            for ((input, label) in inputs.zip(labels).shuffled()) {
+            val shuffledInputs = inputs.zip(labels).let { if (shuffle) it.shuffled() else it }
+            for ((input, label) in shuffledInputs) {
                 val predictions = forward(input)
                 totalLoss += mseLoss(predictions, label)
                 val grad = mseLossGrad(predictions, label)
@@ -22,7 +23,7 @@ open class Model(protected var layers: List<Layer>, protected var optimizer: Opt
                     layer.update(optimizer!!)
                 }
             }
-            if (epoch % 10 == 0) println("Epoch $epoch: Loss = ${totalLoss / inputs.size}")
+            if (epoch % 3 == 0) println("Epoch $epoch: Loss = ${totalLoss / inputs.size}")
         }
     }
 

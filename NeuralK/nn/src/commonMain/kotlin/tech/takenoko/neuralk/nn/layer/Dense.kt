@@ -3,7 +3,6 @@ package tech.takenoko.neuralk.nn.layer
 import tech.takenoko.neuralk.nn.Utils.requireEqual
 import tech.takenoko.neuralk.nn.optimizer.Optimizer
 import tech.takenoko.neuralk.nn.tensor.Tensor
-import tech.takenoko.neuralk.nn.tensor.Tensor0D
 import tech.takenoko.neuralk.nn.tensor.Tensor1D
 import tech.takenoko.neuralk.nn.tensor.Tensor2D
 import tech.takenoko.neuralk.nn.value.Shape
@@ -62,9 +61,9 @@ class Dense(
         constructor(value: Array<Array<Float>>) : this(Tensor2D(value))
 
         override fun getValue() = value
-        override fun update(grad: Tensor, learningRate: Double) {
-            require(grad is Tensor2D)
-            value = (value - grad * Tensor0D(learningRate)) as Tensor2D
+        override fun update(velocity: Tensor) {
+            require(velocity is Tensor2D)
+            value = (value + velocity) as Tensor2D
         }
     }
 
@@ -72,9 +71,9 @@ class Dense(
         constructor(value: Array<Float>) : this(Tensor1D(value))
 
         override fun getValue() = value
-        override fun update(grad: Tensor, learningRate: Double) {
-            require(grad is Tensor1D)
-            value = (value - grad * Tensor0D(learningRate)) as Tensor1D
+        override fun update(velocity: Tensor) {
+            require(velocity is Tensor1D)
+            value = (value + velocity) as Tensor1D
         }
     }
 }

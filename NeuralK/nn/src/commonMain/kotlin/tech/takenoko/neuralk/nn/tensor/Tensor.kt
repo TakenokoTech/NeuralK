@@ -44,6 +44,16 @@ sealed class Tensor {
         }
     }
 
+    operator fun unaryMinus(): Tensor {
+        val vector = { a: Float -> -a }
+        val matrix = { a: Array<Float> -> a.map(vector).toTypedArray() }
+        return when (this) {
+            is Tensor0D -> Tensor0D(-data)
+            is Tensor1D -> Tensor1D(data.map(vector).toTypedArray())
+            is Tensor2D -> Tensor2D(data.map(matrix).toTypedArray())
+        }
+    }
+
     private inline fun <T1, T2, reified R> Array<T1>.broadcastMap(
         other: T2,
         transform: (T1, T2) -> R
@@ -69,5 +79,14 @@ sealed class Tensor {
         is Tensor0D -> listOf(data)
         is Tensor1D -> data.toList()
         is Tensor2D -> data.flatMap { it.toList() }.toList()
+    }
+
+    companion object {
+        fun zeros(shape: Shape): Tensor = when (shape.value.size) {
+            0 -> Tensor0D(0.0)
+            1 -> Tensor1D(shape, 0.0)
+            2 -> Tensor2D(shape, 0.0)
+            else -> throw IllegalArgumentException("Unsupported shape size")
+        }
     }
 }

@@ -8,6 +8,9 @@ class Tensor2D(val data: Array<Array<Float>>) : Tensor() {
     constructor(rows: Int, cols: Int, data: Double) :
         this(Array(rows) { Array(cols) { data.toFloat() } })
 
+    constructor(shape: Shape, data: Double) :
+        this(shape.value[0], shape.value[1], data)
+
     fun sum(): Tensor1D = Tensor1D(
         data = Array(size = cols) { col ->
             var sum = 0f
