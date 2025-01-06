@@ -10,10 +10,24 @@ sealed class Tensor {
 
     operator fun plus(other: Tensor) = calc(other) { a, b -> a + b }
     operator fun minus(other: Tensor) = calc(other) { a, b -> a - b }
-    operator fun times(other: Tensor) = calc(other) { a, b -> a * b }
     operator fun div(other: Tensor) = calc(other) { a, b -> a / b }
     operator fun unaryMinus() = calc(this) { a, _ -> -a }
     fun sqrt() = calc(this) { a, _ -> sqrt(a.toDouble()).toFloat() }
+
+    operator fun times(other: Tensor): Tensor = when {
+        this is Tensor0D && other is Tensor0D -> Tensor0D(data * other.data)
+        this is Tensor1D && other is Tensor0D -> Tensor1D(data.map { it * other.data })
+        this is Tensor1D && other is Tensor1D -> Tensor1D(data.indices.map { i -> data[i] * other.data[i] })
+        this is Tensor2D && other is Tensor0D -> Tensor2D(data.map { it.map { v -> v * other.data } })
+        this is Tensor2D && other is Tensor2D -> Tensor2D(
+            Array(this.rows) { ri ->
+                Array(other.cols) { ci ->
+                    data[ri].zip(other.data.map { it[ci] }) { a, b -> a * b }.sum()
+                }
+            },
+        )
+        else -> throw IllegalArgumentException("Unsupported tensor types. ${this::class.simpleName} * ${other::class.simpleName}")
+    }
 
     private inline fun <T1, T2, reified R> Array<T1>.broadcastMap(
         other: T2,

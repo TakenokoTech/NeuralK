@@ -5,6 +5,9 @@ import tech.takenoko.neuralk.nn.value.Shape
 class Tensor2D(val data: Array<Array<Float>>) : Tensor() {
     override val shape = Shape(data.size, data.first().size)
 
+    constructor(data: List<List<Float>>) :
+        this(data.map { it.toTypedArray() }.toTypedArray())
+
     constructor(rows: Int, cols: Int, data: Double) :
         this(Array(rows) { Array(cols) { data.toFloat() } })
 
@@ -16,7 +19,7 @@ class Tensor2D(val data: Array<Array<Float>>) : Tensor() {
             var sum = 0f
             for (row in 0 until rows) sum += data[row][col]
             sum
-        }
+        },
     )
 
     fun transpose() = Tensor2D(Array(cols) { i -> Array(rows) { j -> data[j][i] } })

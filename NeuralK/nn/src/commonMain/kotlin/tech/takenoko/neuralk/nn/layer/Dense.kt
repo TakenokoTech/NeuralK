@@ -11,7 +11,7 @@ class Dense(
     private val units: Int,
     private val initWeights: Weight? = null,
     private val initBias: Bias? = null,
-    override val trainable: Boolean = true
+    override val trainable: Boolean = true,
 ) : Layer() {
     private lateinit var weights: Weight
     private lateinit var bias: Bias
@@ -24,7 +24,7 @@ class Dense(
             inputShape = input.shape
         }
         if (!::weights.isInitialized) {
-            weights = initWeights ?: Weight(Tensor2D(units, inputShape.rows, data = 0.5))
+            weights = initWeights ?: Weight(Tensor2D(units, inputShape.cols, data = 0.5))
         }
         if (!::bias.isInitialized) {
             bias = initBias ?: Bias(Tensor1D(units, data = 0.5))
@@ -52,8 +52,8 @@ class Dense(
 //        println("weights: ${weights.getData().toList()}, bias: ${bias.getData().toList()}")
     }
 
-    private class Gradient(input: Tensor2D, output: Tensor2D) {
-        val weights: Tensor2D = (output * input.transpose()) as Tensor2D
+    private class Gradient(val input: Tensor2D, val output: Tensor2D) {
+        val weights: Tensor2D = (input.transpose() * output) as Tensor2D
         val bias: Tensor1D = output.sum()
     }
 

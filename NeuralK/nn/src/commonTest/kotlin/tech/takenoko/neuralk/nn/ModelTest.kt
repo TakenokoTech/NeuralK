@@ -5,7 +5,6 @@ import tech.takenoko.neuralk.nn.layer.Layers
 import tech.takenoko.neuralk.nn.loss.MeanSquaredError
 import tech.takenoko.neuralk.nn.model.Model
 import tech.takenoko.neuralk.nn.model.Sequential
-import tech.takenoko.neuralk.nn.optimizer.Adam
 import tech.takenoko.neuralk.nn.optimizer.Sgd
 import tech.takenoko.neuralk.nn.tensor.Tensor2D
 import tech.takenoko.neuralk.nn.value.Shape
@@ -19,7 +18,7 @@ class ModelTest {
         private val shuffle = false
         private fun rand() = Random.nextFloat() * 0.1F
         private fun input(i: Int) = Tensor2D(Array(1) { Array(3) { (it.plus(1) + rand()) * i } })
-        private fun label(index: Int) = Tensor2D(Array(1) { Array(1) { index.toFloat() } })
+        private fun label(index: Int) = Tensor2D(Array(1) { Array(3) { index.toFloat() } })
 
         private val inputs = (0..100).flatMap {
             listOf(input(1), input(4), input(3), input(2), input(5))
@@ -43,7 +42,10 @@ class ModelTest {
     fun test1() {
         // モデルの構築
         val model = Model(
-            layers = Layers(Dense(5), Dense(3)),
+            layers = Layers(
+                Dense(3),
+//                Dense(3),
+            ),
             optimizer = Sgd(learningRate = 0.01, momentum = 0.0),
             loss = MeanSquaredError,
         )
@@ -51,11 +53,11 @@ class ModelTest {
         // 学習
         println("=== Training ===")
         model.fit(inputs, labels, epochs, shuffle)
-
-        // 評価
-        println("=== Evaluation ===")
-        val loss = model.evaluate(inputs, labels)
-        println("Loss: $loss")
+//
+//        // 評価
+//        println("=== Evaluation ===")
+//        val loss = model.evaluate(inputs, labels)
+//        println("Loss: $loss")
 
         // 推論
         println("=== Prediction ===")
@@ -69,11 +71,12 @@ class ModelTest {
     fun test2() {
         val model = Sequential {
             input(shape = Shape(1, 3))
-            dense(5)
             dense(3)
+//            dense(3)
         }.compile(
-            // optimizer = Sgd(learningRate = 0.01, momentum = 0.0),
-            optimizer = Adam(learningRate = 0.01),
+            optimizer = Sgd(learningRate = 0.01, momentum = 0.0),
+//            optimizer = Adam(learningRate = 0.01),
+//            loss = CategoricalCrossentropy,
             loss = MeanSquaredError,
         )
 
