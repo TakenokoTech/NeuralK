@@ -24,6 +24,8 @@ class Adam(
      * θt = θt-1 - η * mtHat / (√vtHat + ε)
      */
     override fun update(parameter: Parameter, gradient: Tensor) {
+        // TODO: 途中でNaNになるため見直しが必要
+        // val gradient = gradient.coerceIn(0F, 1F)
         val t = times.getOrPut(parameter) { 0 } + 1
         val m = momentums.getOrPut(parameter) { Tensor.zeros(gradient.shape) }
         val v = velocities.getOrPut(parameter) { Tensor.zeros(gradient.shape) }
@@ -31,7 +33,7 @@ class Adam(
         val vt = v * Tensor0D(beta2) + gradient * gradient * Tensor0D(1 - beta2)
         val mtHat = mt / Tensor0D(1 - beta1.pow(t))
         val vtHat = vt / Tensor0D(1 - beta2.pow(t))
-        val updateValue = mtHat / (vtHat.sqrt() + Tensor0D(epsilon)) * Tensor0D(learningRate)
+        val updateValue = mtHat / vtHat.sqrt() + Tensor0D(epsilon) * Tensor0D(learningRate)
         times[parameter] = t
         momentums[parameter] = mt
         velocities[parameter] = vt

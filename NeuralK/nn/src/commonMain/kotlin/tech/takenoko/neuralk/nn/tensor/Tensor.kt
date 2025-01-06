@@ -29,6 +29,12 @@ sealed class Tensor {
         else -> throw IllegalArgumentException("Unsupported tensor types. ${this::class.simpleName} * ${other::class.simpleName}")
     }
 
+    fun coerceIn(minimumValue: Float, maximumValue: Float): Tensor = when {
+        this is Tensor1D -> Tensor1D(data.map { it.coerceIn(minimumValue, maximumValue) })
+        this is Tensor2D -> Tensor2D(data.map { it.map { it.coerceIn(minimumValue, maximumValue) } })
+        else -> throw IllegalArgumentException("Unsupported tensor types")
+    }
+
     private inline fun <T1, T2, reified R> Array<T1>.broadcastMap(
         other: T2,
         transform: (T1, T2) -> R,

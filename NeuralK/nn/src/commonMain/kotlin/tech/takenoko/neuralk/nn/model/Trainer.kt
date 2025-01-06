@@ -15,7 +15,7 @@ internal interface Trainer {
         val optimizer = optimizer ?: error("Optimizer must be set")
         val loss = loss ?: error("Loss must be set")
         for (epoch in 1..epochs) {
-            var totalLoss = 0f
+            var totalLoss = 0.0
             val shuffledInputs = inputs.zip(labels).let { if (shuffle) it.shuffled() else it }
             for ((input, label) in shuffledInputs) {
                 val predictions = layers.forward(input)
