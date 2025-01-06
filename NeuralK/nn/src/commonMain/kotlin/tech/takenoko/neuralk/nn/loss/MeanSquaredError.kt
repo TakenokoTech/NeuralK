@@ -6,12 +6,14 @@ import tech.takenoko.neuralk.nn.tensor.Tensor2D
 
 data object MeanSquaredError : Loss() {
     override fun computeLoss(predictions: Tensor, targets: Tensor): Float {
+        require(targets.shape == predictions.shape) { "Shapes of predictions and targets must be the same" }
         val diff = (predictions - targets) as Tensor2D
         val sum = diff.data.sumOf { row -> row.sumOf { it.toDouble() * it } }.toFloat()
         return sum / (diff.rows * diff.cols)
     }
 
     override fun computeGradient(predictions: Tensor, targets: Tensor): Tensor {
+        require(targets.shape == predictions.shape) { "Shapes of predictions and targets must be the same" }
         val diff = (predictions - targets) as Tensor2D
         return diff * Tensor0D(2f / (diff.rows * diff.cols))
     }

@@ -32,22 +32,22 @@ sealed class Tensor {
     private inline fun <T1, T2, reified R> Array<T1>.broadcastMap(
         other: T2,
         transform: (T1, T2) -> R,
-    ) = map { transform(it, other) }.toTypedArray()
+    ) = map { transform(it, other) }
 
     private inline fun <T1, T2, reified R> Array<Array<T1>>.broadcastMap(
         other: Array<T2>,
         transform: (T1, T2) -> R,
-    ) = map { it.zip(other, transform).toTypedArray() }.toTypedArray()
+    ) = map { it.zip(other, transform) }
 
     private inline fun <T1, T2, reified R> Array<Array<T1>>.mapScalar(
         other: T2,
         transform: (T1, T2) -> R,
-    ) = map { it.map { v -> transform(v, other) }.toTypedArray() }.toTypedArray()
+    ) = map { it.map { v -> transform(v, other) } }
 
     private inline fun <T1, T2, reified R> Array<T1>.mapElements(
         other: Array<T2>,
         transform: (T1, T2) -> R,
-    ) = zip(other).map { transform(it.first, it.second) }.toTypedArray()
+    ) = zip(other).map { transform(it.first, it.second) }
 
     private inline fun calc(
         other: Tensor,

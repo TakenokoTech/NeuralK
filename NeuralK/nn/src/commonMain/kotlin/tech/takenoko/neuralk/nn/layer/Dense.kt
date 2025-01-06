@@ -16,15 +16,17 @@ class Dense(
     private lateinit var weights: Weight
     private lateinit var bias: Bias
     private lateinit var inputShape: Shape
+    private lateinit var outputShape: Shape
     private lateinit var savedInput: Tensor2D
     private lateinit var gradient: Gradient
 
     override fun initialize(input: Tensor) {
         if (!::inputShape.isInitialized) {
             inputShape = input.shape
+            outputShape = Shape(*inputShape.value.dropLast(1).toIntArray(), units)
         }
         if (!::weights.isInitialized) {
-            weights = initWeights ?: Weight(Tensor2D(units, inputShape.cols, data = 0.5))
+            weights = initWeights ?: Weight(Tensor2D(inputShape.value.last(), units, data = 0.5))
         }
         if (!::bias.isInitialized) {
             bias = initBias ?: Bias(Tensor1D(units, data = 0.5))
@@ -36,7 +38,7 @@ class Dense(
         require(input is Tensor2D)
         requireEqual(input.rows, inputShape.rows)
         this.savedInput = input
-        return weights.getValue() * input + bias.getValue()
+        return input * weights.getValue() + bias.getValue()
     }
 
     override fun backward(output: Tensor): Tensor {
@@ -46,10 +48,10 @@ class Dense(
     }
 
     override fun update(optimizer: Optimizer) {
+//        println("gradWeights: ${weights.getValue().toList()} -> ${gradient.weights.toList()}")
+//        println("gradBias: ${bias.getValue().toList()} -> ${gradient.bias.toList()}")
         optimizer.update(weights, gradient.weights)
         optimizer.update(bias, gradient.bias)
-//        println("gradWeights: ${gradient.weights.toList()}, gradBias: ${gradient.bias.toList()}")
-//        println("weights: ${weights.getData().toList()}, bias: ${bias.getData().toList()}")
     }
 
     private class Gradient(val input: Tensor2D, val output: Tensor2D) {
@@ -58,8 +60,6 @@ class Dense(
     }
 
     class Weight(private var value: Tensor2D) : Optimizer.Parameter {
-        constructor(value: Array<Array<Float>>) : this(Tensor2D(value))
-
         override fun getValue() = value
         override fun update(velocity: Tensor) {
             require(velocity is Tensor2D)
@@ -68,8 +68,6 @@ class Dense(
     }
 
     class Bias(private var value: Tensor1D) : Optimizer.Parameter {
-        constructor(value: Array<Float>) : this(Tensor1D(value))
-
         override fun getValue() = value
         override fun update(velocity: Tensor) {
             require(velocity is Tensor1D)
