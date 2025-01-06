@@ -1,13 +1,14 @@
 package tech.takenoko.neuralk.nn
 
-import kotlin.random.Random
-import kotlin.test.Test
 import tech.takenoko.neuralk.nn.layer.Dense
+import tech.takenoko.neuralk.nn.layer.Layers
 import tech.takenoko.neuralk.nn.model.Model
 import tech.takenoko.neuralk.nn.model.Sequential
 import tech.takenoko.neuralk.nn.optimizer.Sgd
 import tech.takenoko.neuralk.nn.tensor.Tensor2D
 import tech.takenoko.neuralk.nn.value.Shape
+import kotlin.random.Random
+import kotlin.test.Test
 
 class ModelTest {
 
@@ -32,7 +33,7 @@ class ModelTest {
             Tensor2D(Array(1) { Array(3) { it.plus(1).toFloat() * 3F } }),
             Tensor2D(Array(1) { Array(3) { it.plus(1).toFloat() * 4F } }),
             Tensor2D(Array(1) { Array(3) { it.plus(1).toFloat() * 5F } }),
-            Tensor2D(Array(1) { Array(3) { it.plus(1).toFloat() * 6F } })
+            Tensor2D(Array(1) { Array(3) { it.plus(1).toFloat() * 6F } }),
         )
     }
 
@@ -40,8 +41,8 @@ class ModelTest {
     fun test1() {
         // モデルの構築
         val model = Model(
-            layers = listOf(Dense(5), Dense(3)),
-            optimizer = Sgd(learningRate = 0.01, momentum = 0.0)
+            layers = Layers(Dense(5), Dense(3)),
+            optimizer = Sgd(learningRate = 0.01, momentum = 0.0),
         )
 
         // 学習

@@ -3,11 +3,12 @@ package tech.takenoko.neuralk.nn.model
 import tech.takenoko.neuralk.nn.layer.Dense
 import tech.takenoko.neuralk.nn.layer.Input
 import tech.takenoko.neuralk.nn.layer.Layer
+import tech.takenoko.neuralk.nn.layer.Layers
 import tech.takenoko.neuralk.nn.optimizer.Optimizer
 import tech.takenoko.neuralk.nn.optimizer.Sgd
 import tech.takenoko.neuralk.nn.value.Shape
 
-class Sequential(block: Sequential.() -> Unit) : Model(emptyList(), Sgd()) {
+class Sequential(block: Sequential.() -> Unit) : Model(Layers(), Sgd()) {
     init {
         block()
     }

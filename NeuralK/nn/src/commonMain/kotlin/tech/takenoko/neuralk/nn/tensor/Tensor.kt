@@ -56,22 +56,22 @@ sealed class Tensor {
 
     private inline fun <T1, T2, reified R> Array<T1>.broadcastMap(
         other: T2,
-        transform: (T1, T2) -> R
+        transform: (T1, T2) -> R,
     ) = map { transform(it, other) }.toTypedArray()
 
     private inline fun <T1, T2, reified R> Array<Array<T1>>.broadcastMap(
         other: Array<T2>,
-        transform: (T1, T2) -> R
+        transform: (T1, T2) -> R,
     ) = map { it.zip(other, transform).toTypedArray() }.toTypedArray()
 
     private inline fun <T1, T2, reified R> Array<Array<T1>>.mapScalar(
         other: T2,
-        transform: (T1, T2) -> R
+        transform: (T1, T2) -> R,
     ) = map { it.map { v -> transform(v, other) }.toTypedArray() }.toTypedArray()
 
     private inline fun <T1, T2, reified R> Array<T1>.mapElements(
         other: Array<T2>,
-        transform: (T1, T2) -> R
+        transform: (T1, T2) -> R,
     ) = zip(other).map { transform(it.first, it.second) }.toTypedArray()
 
     fun printShape() = println("Tensor shape: ($rows, $cols), ${Throwable().stackTraceToString()}")
