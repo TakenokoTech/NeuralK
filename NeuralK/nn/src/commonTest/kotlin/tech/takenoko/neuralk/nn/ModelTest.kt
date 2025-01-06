@@ -5,6 +5,7 @@ import tech.takenoko.neuralk.nn.layer.Layers
 import tech.takenoko.neuralk.nn.loss.MeanSquaredError
 import tech.takenoko.neuralk.nn.model.Model
 import tech.takenoko.neuralk.nn.model.Sequential
+import tech.takenoko.neuralk.nn.optimizer.Adam
 import tech.takenoko.neuralk.nn.optimizer.Sgd
 import tech.takenoko.neuralk.nn.tensor.Tensor2D
 import tech.takenoko.neuralk.nn.value.Shape
@@ -71,7 +72,8 @@ class ModelTest {
             dense(5)
             dense(3)
         }.compile(
-            optimizer = Sgd(learningRate = 0.01, momentum = 0.0),
+            // optimizer = Sgd(learningRate = 0.01, momentum = 0.0),
+            optimizer = Adam(learningRate = 0.01),
             loss = MeanSquaredError,
         )
 
