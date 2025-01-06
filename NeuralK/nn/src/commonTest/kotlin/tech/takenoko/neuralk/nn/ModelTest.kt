@@ -2,6 +2,7 @@ package tech.takenoko.neuralk.nn
 
 import tech.takenoko.neuralk.nn.layer.Dense
 import tech.takenoko.neuralk.nn.layer.Layers
+import tech.takenoko.neuralk.nn.loss.MeanSquaredError
 import tech.takenoko.neuralk.nn.model.Model
 import tech.takenoko.neuralk.nn.model.Sequential
 import tech.takenoko.neuralk.nn.optimizer.Sgd
@@ -43,6 +44,7 @@ class ModelTest {
         val model = Model(
             layers = Layers(Dense(5), Dense(3)),
             optimizer = Sgd(learningRate = 0.01, momentum = 0.0),
+            loss = MeanSquaredError,
         )
 
         // 学習
@@ -68,7 +70,10 @@ class ModelTest {
             input(shape = Shape(1, 3))
             dense(5)
             dense(3)
-        }.compile(Sgd(learningRate = 0.01, momentum = 0.0))
+        }.compile(
+            optimizer = Sgd(learningRate = 0.01, momentum = 0.0),
+            loss = MeanSquaredError,
+        )
 
         println("=== Training ===")
         model.fit(inputs, labels, epochs, shuffle)
